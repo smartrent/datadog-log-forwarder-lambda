@@ -8,7 +8,7 @@ variable "lambda_error_sns_topic_arn" {
   description = "SNS Topic for Failed Lambda Executions"
 }
 
-variable "access_log_bucket" {
+variable "bucket" {
   type        = string
   description = "The s3 access logs bucket ARN"
 }
@@ -21,6 +21,18 @@ variable "aws_region" {
 variable "dd_site" {
   type        = string
   description = "The Datadog Site Address"
+}
+
+variable "datadog_forwarder_version" {
+  type        = string
+  description = "The Datadog Forwarder version to use"
+  default     = "3.29.0"
+}
+
+variable "runtime" {
+  type        = string
+  description = "The version of the runtime to use"
+  default     = "python3.7"
 }
 
 variable "tags" {

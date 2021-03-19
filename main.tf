@@ -1,8 +1,7 @@
 # https://github.com/DataDog/datadog-serverless-functions/tree/master/aws/logs_monitoring
 
 locals {
-  lambda_function_name      = "logs_to_datadog"
-  datadog_forwarder_version = "3.29.0"
+  lambda_function_name = "logs_to_datadog"
   tags = merge(var.tags, {
     service : "logs_to_datadog"
     hide-from-datadog : true
@@ -21,13 +20,13 @@ resource "aws_kms_alias" "datadog" {
 }
 
 resource "aws_lambda_function" "logs_to_datadog" {
-  filename                       = "${path.module}/lambda/aws-dd-forwarder-${local.datadog_forwarder_version}.zip"
+  filename                       = "${path.module}/lambda/aws-dd-forwarder-${var.datadog_forwarder_version}.zip"
   description                    = "Datadog serverless log forwarder - Pushes logs, metrics and traces from AWS to Datadog."
   function_name                  = local.lambda_function_name
   role                           = aws_iam_role.lambda_execution.arn
   handler                        = "lambda_function.lambda_handler"
-  source_code_hash               = filebase64sha256("${path.module}/lambda/aws-dd-forwarder-${local.datadog_forwarder_version}.zip")
-  runtime                        = "python3.7"
+  source_code_hash               = filebase64sha256("${path.module}/lambda/aws-dd-forwarder-${var.datadog_forwarder_version}.zip")
+  runtime                        = var.runtime
   timeout                        = 120
   memory_size                    = 1024
   reserved_concurrent_executions = 100
@@ -53,7 +52,7 @@ resource "aws_lambda_function" "logs_to_datadog" {
 
   tags = merge(
     local.tags,
-    { dd_forwarder_version = local.datadog_forwarder_version }
+    { dd_forwarder_version = var.datadog_forwarder_version }
   )
 }
 
@@ -88,7 +87,7 @@ data "aws_iam_policy_document" "lambda_runtime" {
     ]
 
     resources = [
-      "${var.access_log_bucket}/*",
+      "${var.bucket}/*",
     ]
   }
   statement {
