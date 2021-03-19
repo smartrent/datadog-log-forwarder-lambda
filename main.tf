@@ -88,7 +88,7 @@ data "aws_iam_policy_document" "lambda_runtime" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.access_log_bucket}/*",
+      "${var.access_log_bucket}/*",
     ]
   }
   statement {
