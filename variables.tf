@@ -10,7 +10,7 @@ variable "lambda_error_sns_topic_arn" {
 
 variable "bucket" {
   type        = string
-  description = "The s3 access logs bucket ARN"
+  description = "The s3 bucket ARN"
 }
 
 variable "aws_region" {
