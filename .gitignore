@@ -1,1 +1,7 @@
 *.iml
+.terraform/
+.DS_Store
+.idea
+terraform.tfstate
+terraform.tfstate.backup
+.vscode
