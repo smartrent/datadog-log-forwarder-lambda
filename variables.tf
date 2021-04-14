@@ -39,3 +39,9 @@ variable "tags" {
   type        = map(string)
   description = "Tags to assign to resources created by this module"
 }
+
+variable "retention" {
+  type        = number
+  description = "The log group retention in days"
+  default     = 30
+}
