@@ -153,3 +153,9 @@ resource "aws_iam_role_policy_attachment" "lambda_datadog_push" {
   policy_arn = aws_iam_policy.labmda_execution.arn
   role       = aws_iam_role.lambda_execution.name
 }
+
+# Manage Log Group
+resource "aws_cloudwatch_log_group" "log_group" {
+  name              = "/aws/lambda/${aws_lambda_function.logs_to_datadog.function_name}"
+  retention_in_days = var.retention
+}

@@ -1,6 +1,6 @@
 container:
   image: smartrent/terraform-ci:0.14.4
-  cpu: 0.5
+  cpu: 1
 
 base: &base
   timeout_in: 30m
