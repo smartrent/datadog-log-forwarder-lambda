@@ -4,7 +4,6 @@ locals {
   lambda_function_name = "logs_to_datadog"
   tags = merge(var.tags, {
     service : "logs_to_datadog"
-    hide-from-datadog : true
   })
 }
 
