@@ -11,6 +11,7 @@ data "aws_caller_identity" "current" {}
 
 resource "aws_kms_key" "datadog" {
   description = "KMS key for datadog lambda"
+  tags        = local.tags
 }
 
 resource "aws_kms_alias" "datadog" {
@@ -146,6 +147,7 @@ resource "aws_iam_policy" "labmda_execution" {
   name        = "datadog-lambda-${var.environment_name}-${var.aws_region}"
   policy      = data.aws_iam_policy_document.lambda_runtime.json
   description = "Managed by Terraform"
+  tags        = local.tags
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_datadog_push" {
@@ -157,4 +159,5 @@ resource "aws_iam_role_policy_attachment" "lambda_datadog_push" {
 resource "aws_cloudwatch_log_group" "log_group" {
   name              = "/aws/lambda/${aws_lambda_function.logs_to_datadog.function_name}"
   retention_in_days = var.retention
+  tags              = local.tags
 }
