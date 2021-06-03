@@ -18,6 +18,10 @@ variable "aws_region" {
   description = "AWS Region"
 }
 
+variable "region" {
+  type        = string
+  description = "AWS Region"
+}
 variable "dd_site" {
   type        = string
   description = "The Datadog Site Address"

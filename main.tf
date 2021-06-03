@@ -6,6 +6,9 @@ locals {
     service : "logs_to_datadog"
   })
 }
+provider "aws" {
+  region  = var.region
+}
 
 data "aws_caller_identity" "current" {}
 
