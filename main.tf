@@ -163,7 +163,7 @@ resource "aws_cloudwatch_log_group" "log_group" {
 }
 
 resource "aws_sns_topic_subscription" "sns_topic_arn" {
-  topic_arn = var.environment_alerts
+  topic_arn = var.sns_topic_arn
   protocol  = "lambda"
   endpoint  = aws_lambda_function.logs_to_datadog.arn
 }
