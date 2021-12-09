@@ -161,3 +161,18 @@ resource "aws_cloudwatch_log_group" "log_group" {
   retention_in_days = var.retention
   tags              = local.tags
 }
+
+resource "aws_sns_topic_subscription" "sns_topic_arn" {
+  topic_arn = var.sns_topic_arn
+  protocol  = "lambda"
+  endpoint  = aws_lambda_function.logs_to_datadog.arn
+}
+
+resource "aws_lambda_permission" "sns_topic_arn" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.logs_to_datadog.function_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = var.sns_topic_arn
+}
+
