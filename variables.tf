@@ -45,3 +45,8 @@ variable "retention" {
   description = "The log group retention in days"
   default     = 30
 }
+
+variable "sns_topic_arn" {
+  type        = string
+  description = "SNS Topic ARN"
+}
