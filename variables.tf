@@ -46,7 +46,14 @@ variable "retention" {
   default     = 30
 }
 
-variable "sns_topic_arn" {
-  type        = string
-  description = "SNS Topic ARN"
+variable "provision_trigger" {
+  type        = bool
+  description = "Whether or not to create a lambda trigger from an SNS topic"
+  default     = "false"
+}
+
+variable "sns_topic_arns" {
+  type        = list(string)
+  description = "SNS Topic ARNs"
+  default     = ["undefined"]
 }

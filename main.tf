@@ -162,17 +162,17 @@ resource "aws_cloudwatch_log_group" "log_group" {
   tags              = local.tags
 }
 
-resource "aws_sns_topic_subscription" "sns_topic_arn" {
-  topic_arn = var.sns_topic_arn
+resource "aws_sns_topic_subscription" "sns_topic_arns" {
+  count     = var.provision_trigger ? length(var.sns_topic_arns) : 0
+  topic_arn = var.sns_topic_arns[count.index]
   protocol  = "lambda"
   endpoint  = aws_lambda_function.logs_to_datadog.arn
 }
 
-resource "aws_lambda_permission" "sns_topic_arn" {
-  statement_id  = "AllowExecutionFromSNS"
+resource "aws_lambda_permission" "sns_topic_arns" {
+  count         = var.provision_trigger ? length(var.sns_topic_arns) : 0
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.logs_to_datadog.function_name
   principal     = "sns.amazonaws.com"
-  source_arn    = var.sns_topic_arn
+  source_arn    = var.sns_topic_arns[count.index]
 }
-
