@@ -52,8 +52,8 @@ variable "provision_trigger" {
   default     = "false"
 }
 
-variable "sns_topic_arn" {
+variable "sns_topic_arns" {
   type        = list(string)
-  description = "SNS Topic ARN"
+  description = "SNS Topic ARNs"
   default     = ["undefined"]
 }
