@@ -3,11 +3,6 @@ variable "environment_name" {
   description = "Environment name: dev, qa, prod"
 }
 
-variable "lambda_error_sns_topic_arn" {
-  type        = string
-  description = "SNS Topic for Failed Lambda Executions"
-}
-
 variable "bucket" {
   type        = string
   description = "The s3 bucket ARN"

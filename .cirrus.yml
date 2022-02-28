@@ -1,5 +1,5 @@
 container:
-  image: smartrent/terraform-ci:0.14.4
+  image: smartrent/terraform-ci:1.1.3
   cpu: 1
 
 base: &base
@@ -13,4 +13,5 @@ format_task:
 tflint_task:
   <<: *base
   tflint_script:
+    - tflint --init
     - tflint
