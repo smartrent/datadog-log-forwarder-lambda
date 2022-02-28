@@ -7,8 +7,6 @@ locals {
   })
 }
 
-data "aws_caller_identity" "current" {}
-
 resource "aws_kms_key" "datadog" {
   description = "KMS key for datadog lambda"
   tags        = local.tags
