@@ -25,9 +25,9 @@ resource "aws_lambda_function" "logs_to_datadog" {
   handler                        = "lambda_function.lambda_handler"
   source_code_hash               = filebase64sha256("${path.module}/lambda/aws-dd-forwarder-${var.datadog_forwarder_version}.zip")
   runtime                        = var.runtime
-  timeout                        = 120
-  memory_size                    = 1024
-  reserved_concurrent_executions = 100
+  timeout                        = var.timeout
+  memory_size                    = var.memory_size
+  reserved_concurrent_executions = var.reserved_concurrent_executions
 
   kms_key_arn = aws_kms_key.datadog.arn
 
@@ -35,7 +35,7 @@ resource "aws_lambda_function" "logs_to_datadog" {
     variables = {
       DD_API_KEY_SECRET_ARN = aws_secretsmanager_secret.api-key.arn
       DD_SITE               = var.dd_site
-      DD_ENHANCED_METRICS   = false
+      DD_ENHANCED_METRICS   = var.enhanced_metrics
     }
   }
   lifecycle {
