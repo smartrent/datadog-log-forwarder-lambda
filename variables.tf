@@ -52,3 +52,27 @@ variable "sns_topic_arns" {
   description = "SNS Topic ARNs"
   default     = ["undefined"]
 }
+
+variable "timeout" {
+  type        = number
+  description = "The length of time in seconds before function times out"
+  default     = 120
+}
+
+variable "memory_size" {
+  type        = number
+  description = "Amount of memory in MB your Lambda Function can use at runtime"
+  default     = 1024
+}
+
+variable "reserved_concurrent_executions" {
+  type        = number
+  description = "Amount of reserved concurrent executions for this lambda function"
+  default     = 100
+}
+
+variable "enhanced_metrics" {
+  type        = bool
+  description = "Whether Datadog enhanced metrics is enabled"
+  default     = false
+}
