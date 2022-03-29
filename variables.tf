@@ -27,7 +27,7 @@ variable "datadog_forwarder_version" {
 variable "runtime" {
   type        = string
   description = "The version of the runtime to use"
-  default     = "python3.7"
+  default     = "3.7"
 }
 
 variable "tags" {
@@ -75,4 +75,22 @@ variable "enhanced_metrics" {
   type        = bool
   description = "Whether Datadog enhanced metrics is enabled"
   default     = false
+}
+
+variable "layers" {
+  type        = bool
+  description = "Whether or not to use layers"
+  default     = false
+}
+
+variable "datadog_python_layer_version" {
+  type        = number
+  description = "The version of the Datadog Python Layer"
+  default     = 53
+}
+
+variable "datadog_extension_layer_version" {
+  type        = number
+  description = "The version of the Datadog Extension Layer"
+  default     = 21
 }
