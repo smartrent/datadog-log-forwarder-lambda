@@ -92,5 +92,5 @@ variable "datadog_python_layer_version" {
 variable "datadog_extension_layer_version" {
   type        = number
   description = "The version of the Datadog Extension Layer"
-  default     = 21
+  default     = 22
 }
