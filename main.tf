@@ -40,6 +40,8 @@ resource "aws_lambda_function" "logs_to_datadog" {
       DD_API_KEY_SECRET_ARN = aws_secretsmanager_secret.api-key.arn
       DD_SITE               = var.dd_site
       DD_ENHANCED_METRICS   = var.enhanced_metrics
+      ## Filter out lambda platform logs
+      EXCLUDE_AT_MATCH = "\"(START|END|REPORT) RequestId:\\s"
     }
   }
 
