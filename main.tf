@@ -41,7 +41,7 @@ resource "aws_lambda_function" "logs_to_datadog" {
       DD_SITE               = var.dd_site
       DD_ENHANCED_METRICS   = var.enhanced_metrics
       ## Filter out lambda platform logs
-      EXCLUDE_AT_MATCH = "\"(START|END|REPORT) RequestId:\\s"
+      EXCLUDE_AT_MATCH = "\"(START|END) RequestId:\\s"
     }
   }
 
