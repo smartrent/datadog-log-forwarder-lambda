@@ -21,13 +21,13 @@ variable "dd_site" {
 variable "datadog_forwarder_version" {
   type        = string
   description = "The Datadog Forwarder version to use"
-  default     = "3.44.0"
+  default     = "3.60.0"
 }
 
 variable "runtime" {
   type        = string
   description = "The version of the runtime to use"
-  default     = "3.7"
+  default     = "3.8"
 }
 
 variable "tags" {
@@ -86,11 +86,11 @@ variable "layers" {
 variable "datadog_python_layer_version" {
   type        = number
   description = "The version of the Datadog Python Layer"
-  default     = 53
+  default     = 63
 }
 
 variable "datadog_extension_layer_version" {
   type        = number
   description = "The version of the Datadog Extension Layer"
-  default     = 22
+  default     = 31
 }
