@@ -27,7 +27,7 @@ variable "datadog_forwarder_version" {
 variable "runtime" {
   type        = string
   description = "The version of the runtime to use"
-  default     = "3.8"
+  default     = "3.7"
 }
 
 variable "tags" {
