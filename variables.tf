@@ -27,7 +27,7 @@ variable "datadog_forwarder_version" {
 variable "runtime" {
   type        = string
   description = "The version of the runtime to use"
-  default     = "3.7"
+  default     = "3.8"
 }
 
 variable "tags" {
@@ -86,11 +86,11 @@ variable "layers" {
 variable "datadog_python_layer_version" {
   type        = number
   description = "The version of the Datadog Python Layer"
-  default     = 60
+  default     = 63
 }
 
 variable "datadog_extension_layer_version" {
   type        = number
   description = "The version of the Datadog Extension Layer"
-  default     = 31
+  default     = 32
 }
