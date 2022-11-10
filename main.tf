@@ -22,12 +22,12 @@ resource "aws_kms_alias" "datadog" {
 }
 
 resource "aws_lambda_function" "logs_to_datadog" {
-  filename                       = "${path.module}/lambda/aws-dd-forwarder-${var.datadog_forwarder_version}.zip"
+  filename                       = "${path.module}/lambda-3.60.0/aws-dd-forwarder-${var.datadog_forwarder_version}.zip"
   description                    = "Datadog serverless log forwarder - Pushes logs, metrics and traces from AWS to Datadog."
   function_name                  = local.lambda_function_name
   role                           = aws_iam_role.lambda_execution.arn
   handler                        = "lambda_function.lambda_handler"
-  source_code_hash               = filebase64sha256("${path.module}/lambda/aws-dd-forwarder-${var.datadog_forwarder_version}.zip")
+  source_code_hash               = filebase64sha256("${path.module}/lambda-3.60.0/aws-dd-forwarder-${var.datadog_forwarder_version}.zip")
   runtime                        = "python${var.runtime}"
   timeout                        = var.timeout
   memory_size                    = var.memory_size
