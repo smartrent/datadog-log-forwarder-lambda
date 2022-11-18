@@ -72,7 +72,7 @@ resource "aws_cloudformation_stack" "logs_to_datadog" {
     DdApiKeySecretArn  = aws_secretsmanager_secret.api-key.arn,
     DdSite             = "{{< region-param key="var.dd_site" code="true" >}}",
     FunctionName       = "local.lambda_function_name"
-  }
+  },
   description                    = "Datadog serverless log forwarder - Pushes logs, metrics and traces from AWS to Datadog."
   template_url                   = "https://datadog-cloudformation-template.s3.amazonaws.com/aws/forwarder/latest.yaml"
   timeout                        = var.timeout
@@ -87,7 +87,7 @@ resource "aws_cloudformation_stack" "logs_to_datadog" {
       ## Filter out lambda platform logs
       EXCLUDE_AT_MATCH = "\"(START|END) RequestId:\\s"
     }
-  }
+  },
 
   layers = local.layers
 
@@ -95,11 +95,11 @@ resource "aws_cloudformation_stack" "logs_to_datadog" {
     ignore_changes = [
       last_modified,
     ]
-  }
+  },
 
   tracing_config {
     mode = "Active"
-  }
+  },
 
   tags = merge(
     local.tags,
