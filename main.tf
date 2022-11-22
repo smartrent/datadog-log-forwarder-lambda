@@ -70,7 +70,7 @@ resource "aws_cloudformation_stack" "logs_to_datadog" {
   capabilities                   = ["aws_iam_role.lambda_execution.arn"]
   parameters                     = {
     DdApiKeySecretArn  = aws_secretsmanager_secret.api-key.arn,
-    DdSite             = "{{< region-param key="var.dd_site" code="true" >}}",
+    DdSite             = "{{< region-param key="dd_site" code="true" >}}",
     FunctionName       = "local.lambda_function_name"
   }
   description                    = "Datadog serverless log forwarder - Pushes logs, metrics and traces from AWS to Datadog."
@@ -95,7 +95,7 @@ resource "aws_cloudformation_stack" "logs_to_datadog" {
     ignore_changes = [
       last_modified,
     ]
-  },
+  }
 
   tracing_config {
     mode = "Active"
