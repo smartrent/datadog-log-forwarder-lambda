@@ -18,11 +18,11 @@ variable "dd_site" {
   description = "The Datadog Site Address"
 }
 
-variable "datadog_forwarder_version" {
-  type        = string
-  description = "The Datadog Forwarder version to use"
-  default     = "3.60.0"
-}
+#variable "datadog_forwarder_version" {
+#  type        = string
+#  description = "The Datadog Forwarder version to use"
+#  default     = "3.60.0"
+#}
 
 variable "runtime" {
   type        = string
@@ -30,10 +30,10 @@ variable "runtime" {
   default     = "3.8"
 }
 
-variable "tags" {
-  type        = map(string)
-  description = "Tags to assign to resources created by this module"
-}
+#variable "tags" {
+#  type        = map(string)
+#  description = "Tags to assign to resources created by this module"
+#}
 
 variable "retention" {
   type        = number
