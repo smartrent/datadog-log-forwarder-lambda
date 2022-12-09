@@ -66,9 +66,9 @@ resource "aws_kms_alias" "datadog" {
 # Datadog Forwarder to ship logs from S3 and CloudWatch, as well as observability data from Lambda functions to Datadog.
 # https://github.com/DataDog/datadog-serverless-functions/tree/master/aws/logs_monitoring
 resource "aws_cloudformation_stack" "logs_to_datadog" {
-  name                           = "logs_to_datadog"
-  capabilities                   = ["aws_iam_role.lambda_execution.arn"]
-  parameters                     = {
+  name         = "logs_to_datadog"
+  capabilities = ["aws_iam_role.lambda_execution.arn"]
+  parameters = {
     DdApiKeySecretArn     = aws_secretsmanager_secret.api-key.arn,
     DdSite                = var.dd_site,
     FunctionName          = "local.lambda_function_name",
