@@ -69,14 +69,14 @@ resource "aws_cloudformation_stack" "logs_to_datadog" {
   name                           = "logs_to_datadog"
   capabilities                   = ["aws_iam_role.lambda_execution.arn"]
   parameters                     = {
-    DdApiKeySecretArn  = aws_secretsmanager_secret.api-key.arn,
-    DdSite             = var.dd_site,
-    FunctionName       = "local.lambda_function_name",
+    DdApiKeySecretArn     = aws_secretsmanager_secret.api-key.arn,
+    DdSite                = var.dd_site,
+    FunctionName          = "local.lambda_function_name",
     DD_API_KEY_SECRET_ARN = aws_secretsmanager_secret.api-key.arn,
     DD_SITE               = var.dd_site,
     DD_ENHANCED_METRICS   = var.enhanced_metrics,
     ## Filter out lambda platform logs,
-    EXCLUDE_AT_MATCH = "\"(START|END) RequestId:\\s"
+    EXCLUDE_AT_MATCH      = "\"(START|END) RequestId:\\s"
   }
   description                    = "Datadog serverless log forwarder - Pushes logs, metrics and traces from AWS to Datadog."
   template_url                   = "https://datadog-cloudformation-template.s3.amazonaws.com/aws/forwarder/latest.yaml"
