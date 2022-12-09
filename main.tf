@@ -84,15 +84,15 @@ resource "aws_cloudformation_stack" "logs_to_datadog" {
   memory_size                    = var.memory_size
   reserved_concurrent_executions = var.reserved_concurrent_executions
 
-#  environment {
-#    variables = {
-#      DD_API_KEY_SECRET_ARN = aws_secretsmanager_secret.api-key.arn,
-#      DD_SITE               = var.dd_site,
-#      DD_ENHANCED_METRICS   = var.enhanced_metrics,
-#      ## Filter out lambda platform logs,
-#      EXCLUDE_AT_MATCH = "\"(START|END) RequestId:\\s"
-#    }
-#  }
+  #environment {
+  #  variables = {
+  #    DD_API_KEY_SECRET_ARN = aws_secretsmanager_secret.api-key.arn,
+  #    DD_SITE               = var.dd_site,
+  #    DD_ENHANCED_METRICS   = var.enhanced_metrics,
+  #    ## Filter out lambda platform logs,
+  #    EXCLUDE_AT_MATCH = "\"(START|END) RequestId:\\s"
+  #  }
+  #}
 
   layers = local.layers
 
@@ -106,10 +106,10 @@ resource "aws_cloudformation_stack" "logs_to_datadog" {
     mode = "Active"
   }
 
-#  tags = merge(
-#    local.tags,
-#    { dd_forwarder_version = var.datadog_forwarder_version }
-#  )
+  #tags = merge(
+  #  local.tags,
+  #  { dd_forwarder_version = var.datadog_forwarder_version }
+  #)
 }
 
 resource "aws_secretsmanager_secret" "api-key" {
