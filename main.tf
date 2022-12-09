@@ -70,8 +70,13 @@ resource "aws_cloudformation_stack" "logs_to_datadog" {
   capabilities                   = ["aws_iam_role.lambda_execution.arn"]
   parameters                     = {
     DdApiKeySecretArn  = aws_secretsmanager_secret.api-key.arn,
-    DdSite             = "{{< region-param key="dd_site" code="true" >}}",
-    FunctionName       = "local.lambda_function_name"
+    DdSite             = var.dd_site,
+    FunctionName       = "local.lambda_function_name",
+    DD_API_KEY_SECRET_ARN = aws_secretsmanager_secret.api-key.arn,
+    DD_SITE               = var.dd_site,
+    DD_ENHANCED_METRICS   = var.enhanced_metrics,
+    ## Filter out lambda platform logs,
+    EXCLUDE_AT_MATCH = "\"(START|END) RequestId:\\s"
   }
   description                    = "Datadog serverless log forwarder - Pushes logs, metrics and traces from AWS to Datadog."
   template_url                   = "https://datadog-cloudformation-template.s3.amazonaws.com/aws/forwarder/latest.yaml"
@@ -79,15 +84,15 @@ resource "aws_cloudformation_stack" "logs_to_datadog" {
   memory_size                    = var.memory_size
   reserved_concurrent_executions = var.reserved_concurrent_executions
 
-  environment {
-    variables = {
-      DD_API_KEY_SECRET_ARN = aws_secretsmanager_secret.api-key.arn,
-      DD_SITE               = var.dd_site,
-      DD_ENHANCED_METRICS   = var.enhanced_metrics,
-      ## Filter out lambda platform logs,
-      EXCLUDE_AT_MATCH = "\"(START|END) RequestId:\\s"
-    }
-  }
+#  environment {
+#    variables = {
+#      DD_API_KEY_SECRET_ARN = aws_secretsmanager_secret.api-key.arn,
+#      DD_SITE               = var.dd_site,
+#      DD_ENHANCED_METRICS   = var.enhanced_metrics,
+#      ## Filter out lambda platform logs,
+#      EXCLUDE_AT_MATCH = "\"(START|END) RequestId:\\s"
+#    }
+#  }
 
   layers = local.layers
 
@@ -101,10 +106,10 @@ resource "aws_cloudformation_stack" "logs_to_datadog" {
     mode = "Active"
   }
 
-  tags = merge(
-    local.tags,
-    { dd_forwarder_version = var.datadog_forwarder_version }
-  )
+#  tags = merge(
+#    local.tags,
+#    { dd_forwarder_version = var.datadog_forwarder_version }
+#  )
 }
 
 resource "aws_secretsmanager_secret" "api-key" {
