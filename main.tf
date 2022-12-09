@@ -75,7 +75,6 @@ resource "aws_cloudformation_stack" "logs_to_datadog" {
     DD_API_KEY_SECRET_ARN = aws_secretsmanager_secret.api-key.arn,
     DD_SITE               = var.dd_site,
     DD_ENHANCED_METRICS   = var.enhanced_metrics,
-    ## Filter out lambda platform logs,
     EXCLUDE_AT_MATCH      = "\"(START|END) RequestId:\\s"
   }
   description                    = "Datadog serverless log forwarder - Pushes logs, metrics and traces from AWS to Datadog."
