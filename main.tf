@@ -21,29 +21,77 @@ resource "aws_kms_alias" "datadog" {
   name          = "alias/datadog_lambda"
 }
 
-resource "aws_lambda_function" "logs_to_datadog" {
-  filename                       = "${path.module}/lambda/aws-dd-forwarder-${var.datadog_forwarder_version}.zip"
+#resource "aws_lambda_function" "logs_to_datadog" {
+#  filename                       = "${path.module}/lambda/aws-dd-forwarder-${var.datadog_forwarder_version}.zip"
+#  description                    = "Datadog serverless log forwarder - Pushes logs, metrics and traces from AWS to Datadog."
+#  function_name                  = local.lambda_function_name
+#  role                           = aws_iam_role.lambda_execution.arn
+#  handler                        = "lambda_function.lambda_handler"
+#  source_code_hash               = filebase64sha256("${path.module}/lambda/aws-dd-forwarder-${var.datadog_forwarder_version}.zip")
+#  runtime                        = "python${var.runtime}"
+#  timeout                        = var.timeout
+#  memory_size                    = var.memory_size
+#  reserved_concurrent_executions = var.reserved_concurrent_executions
+
+#  kms_key_arn = aws_kms_key.datadog.arn
+
+#  environment {
+#    variables = {
+#      DD_API_KEY_SECRET_ARN = aws_secretsmanager_secret.api-key.arn
+#      DD_SITE               = var.dd_site
+#      DD_ENHANCED_METRICS   = var.enhanced_metrics
+#      ## Filter out lambda platform logs
+#      EXCLUDE_AT_MATCH = "\"(START|END) RequestId:\\s"
+#    }
+#  }
+
+#  layers = local.layers
+
+#  lifecycle {
+#    ignore_changes = [
+#      last_modified,
+#    ]
+#  }
+
+#  tracing_config {
+#    mode = "Active"
+#  }
+
+#  tags = merge(
+#    local.tags,
+#    { dd_forwarder_version = var.datadog_forwarder_version }
+#  )
+#}
+
+# Datadog Forwarder to ship logs from S3 and CloudWatch, as well as observability data from Lambda functions to Datadog.
+# https://github.com/DataDog/datadog-serverless-functions/tree/master/aws/logs_monitoring
+resource "aws_cloudformation_stack" "logs_to_datadog" {
+  name         = "logs_to_datadog"
+  capabilities = ["aws_iam_role.lambda_execution.arn"]
+  parameters = {
+    DdApiKeySecretArn     = aws_secretsmanager_secret.api-key.arn,
+    DdSite                = var.dd_site,
+    FunctionName          = "local.lambda_function_name",
+    DD_API_KEY_SECRET_ARN = aws_secretsmanager_secret.api-key.arn,
+    DD_SITE               = var.dd_site,
+    DD_ENHANCED_METRICS   = var.enhanced_metrics,
+    EXCLUDE_AT_MATCH      = "\"(START|END) RequestId:\\s"
+  }
   description                    = "Datadog serverless log forwarder - Pushes logs, metrics and traces from AWS to Datadog."
-  function_name                  = local.lambda_function_name
-  role                           = aws_iam_role.lambda_execution.arn
-  handler                        = "lambda_function.lambda_handler"
-  source_code_hash               = filebase64sha256("${path.module}/lambda/aws-dd-forwarder-${var.datadog_forwarder_version}.zip")
-  runtime                        = "python${var.runtime}"
+  template_url                   = "https://datadog-cloudformation-template.s3.amazonaws.com/aws/forwarder/latest.yaml"
   timeout                        = var.timeout
   memory_size                    = var.memory_size
   reserved_concurrent_executions = var.reserved_concurrent_executions
 
-  kms_key_arn = aws_kms_key.datadog.arn
-
-  environment {
-    variables = {
-      DD_API_KEY_SECRET_ARN = aws_secretsmanager_secret.api-key.arn
-      DD_SITE               = var.dd_site
-      DD_ENHANCED_METRICS   = var.enhanced_metrics
-      ## Filter out lambda platform logs
-      EXCLUDE_AT_MATCH = "\"(START|END) RequestId:\\s"
-    }
-  }
+  #environment {
+  #  variables = {
+  #    DD_API_KEY_SECRET_ARN = aws_secretsmanager_secret.api-key.arn,
+  #    DD_SITE               = var.dd_site,
+  #    DD_ENHANCED_METRICS   = var.enhanced_metrics,
+  #    ## Filter out lambda platform logs,
+  #    EXCLUDE_AT_MATCH = "\"(START|END) RequestId:\\s"
+  #  }
+  #}
 
   layers = local.layers
 
@@ -57,10 +105,10 @@ resource "aws_lambda_function" "logs_to_datadog" {
     mode = "Active"
   }
 
-  tags = merge(
-    local.tags,
-    { dd_forwarder_version = var.datadog_forwarder_version }
-  )
+  #tags = merge(
+  #  local.tags,
+  #  { dd_forwarder_version = var.datadog_forwarder_version }
+  #)
 }
 
 resource "aws_secretsmanager_secret" "api-key" {
