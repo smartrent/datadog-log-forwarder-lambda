@@ -48,12 +48,6 @@ resource "aws_lambda_function" "logs_to_datadog" {
 
   layers = local.layers
 
-  lifecycle {
-    ignore_changes = [
-      last_modified,
-    ]
-  }
-
   tracing_config {
     mode = "Active"
   }
