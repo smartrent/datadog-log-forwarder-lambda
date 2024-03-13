@@ -9,3 +9,7 @@ output "lambda_function_arn" {
 output "lambda_iam_role_arn" {
   value = aws_iam_role.lambda_execution.arn
 }
+
+output "kms_key_arn" {
+  value = aws_kms_key.datadog.arn
+}
