@@ -13,3 +13,7 @@ output "lambda_iam_role_arn" {
 output "kms_key_arn" {
   value = aws_kms_key.datadog.arn
 }
+
+output "lambda_api_key_secret" {
+  value = aws_secretsmanager_secret.api-key.arn
+}
