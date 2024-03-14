@@ -17,7 +17,3 @@ output "kms_key_arn" {
 output "lambda_api_key_secret" {
   value = aws_secretsmanager_secret.api-key.arn
 }
-
-output "sns_topic_arns" {
-  value = try(aws_sns_topic_subscription.sns_topic_arns[*].arn, null)
-}
