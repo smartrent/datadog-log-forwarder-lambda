@@ -19,5 +19,5 @@ output "lambda_api_key_secret" {
 }
 
 output "sns_topic_arns" {
-  value = try(aws_sns_topic_subscription.sns_topic_arns.*.arn, null)
+  value = try(aws_sns_topic_subscription.sns_topic_arns[*].arn, null)
 }
