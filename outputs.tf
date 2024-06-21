@@ -17,3 +17,7 @@ output "kms_key_arn" {
 output "lambda_api_key_secret" {
   value = aws_secretsmanager_secret.api-key.arn
 }
+
+output "lambda_iam_policy_arn" {
+value = aws_iam_policy.labmda_execution.arn
+}
