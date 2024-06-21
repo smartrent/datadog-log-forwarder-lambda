@@ -19,5 +19,5 @@ output "lambda_api_key_secret" {
 }
 
 output "lambda_iam_policy_arn" {
-value = aws_iam_policy.labmda_execution.arn
+  value = aws_iam_policy.labmda_execution.arn
 }
