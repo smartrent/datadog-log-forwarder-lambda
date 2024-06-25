@@ -88,9 +88,8 @@ data "aws_iam_policy_document" "lambda_runtime" {
       "s3:GetObject",
     ]
 
-    resources = [
-      "${var.bucket}/*",
-    ]
+    resources = formatlist("%s/*", var.bucket_arns)
+
   }
   statement {
     sid = "AllowXRay"
