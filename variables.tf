@@ -3,9 +3,9 @@ variable "environment_name" {
   description = "Environment name: dev, qa, prod"
 }
 
-variable "bucket" {
-  type        = string
-  description = "The s3 bucket ARN"
+variable "bucket_arns" {
+  type        = list(string)
+  description = "A list of s3 bucket ARNs"
 }
 
 variable "aws_region" {
