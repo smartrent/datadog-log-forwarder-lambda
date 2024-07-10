@@ -183,7 +183,7 @@ resource "aws_lambda_permission" "sns_topic_arns" {
 
 resource "aws_lambda_permission" "rds_logs" {
   count         = var.rds_logs ? 1 : 0
-  statement_id = "${local.account_id}-${var.aws_region}-rds-logs-to-datadog"
+  statement_id  = "${local.account_id}-${var.aws_region}-rds-logs-to-datadog"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.logs_to_datadog.function_name
   principal     = "logs.${var.aws_region}.amazonaws.com"
