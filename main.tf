@@ -186,5 +186,5 @@ resource "aws_lambda_permission" "rds_logs" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.logs_to_datadog.function_name
   principal     = "logs.amazonaws.com"
-  source_arn    = "arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:/aws/rds/*"
+  source_arn    = "arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:/aws/rds/*:*"
 }
