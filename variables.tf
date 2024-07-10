@@ -94,3 +94,9 @@ variable "datadog_extension_layer_version" {
   description = "The version of the Datadog Extension Layer"
   default     = 34
 }
+
+variable "rds_logs" {
+  type        = bool
+  description = "Whether to create lambda resource policy for sending all /aws/rds/* cloudwatch logs to the datadog log forwarder"
+  default     = true
+}
