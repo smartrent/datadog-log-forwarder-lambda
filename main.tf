@@ -6,10 +6,13 @@ locals {
     "arn:aws:lambda:${var.aws_region}:464622532012:layer:Datadog-Python${replace(var.runtime, ".", "")}:${var.datadog_python_layer_version}",
     "arn:aws:lambda:${var.aws_region}:464622532012:layer:Datadog-Extension:${var.datadog_extension_layer_version}",
   ] : []
+  account_id = data.aws_caller_identity.current.account_id
   tags = merge(var.tags, {
     service : "logs_to_datadog"
   })
 }
+
+data "aws_caller_identity" "current" {}
 
 resource "aws_kms_key" "datadog" {
   description = "KMS key for datadog lambda"
@@ -176,4 +179,13 @@ resource "aws_lambda_permission" "sns_topic_arns" {
   function_name = aws_lambda_function.logs_to_datadog.function_name
   principal     = "sns.amazonaws.com"
   source_arn    = var.sns_topic_arns[count.index]
+}
+
+resource "aws_lambda_permission" "rds_logs" {
+  count         = var.rds_logs ? 1 : 0
+  statement_id  = "${local.account_id}-${var.aws_region}-rds-logs-to-datadog"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.logs_to_datadog.function_name
+  principal     = "logs.${var.aws_region}.amazonaws.com"
+  source_arn    = "arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:/aws/rds/*:*"
 }
