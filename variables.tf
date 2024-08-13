@@ -100,3 +100,9 @@ variable "rds_logs" {
   description = "Whether to create lambda resource policy for sending all /aws/rds/* cloudwatch logs to the datadog log forwarder"
   default     = true
 }
+
+variable "store_failed_events" {
+  type        = bool
+  description = "Whether to store failed events in the log forwarder"
+  default     = true
+}
