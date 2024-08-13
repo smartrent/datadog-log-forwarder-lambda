@@ -1,0 +1,73 @@
+# https://circleci.com/docs/configuration-reference/
+version: 2.1
+
+defaults:
+  terraform-docker-image: &terraform-docker-image
+    docker:
+      - image: smartrent/terraform-ci:1.5.7-1a
+
+jobs:
+  terraform-fmt:
+    <<: *terraform-docker-image
+    steps:
+      - checkout
+      - run:
+          name: tf format
+          command: |
+            terraform --version
+            terraform fmt -check -recursive
+
+  terraform-validate:
+    <<: *terraform-docker-image
+    steps:
+      - checkout
+      - run:
+          name: tf validate
+          command: |
+            terraform --version
+
+            terraform init -input=false -backend=false
+            terraform validate
+
+  tflint:
+    <<: *terraform-docker-image
+    steps:
+      - checkout
+      - run:
+          name: tflint
+          command: |
+            terraform --version
+            tflint --version
+
+            terraform init -input=false -backend=false
+            tflint --init --config ~/project/.tflint.hcl
+            tflint --module
+
+  tfsec:
+    <<: *terraform-docker-image
+    steps:
+      - checkout
+      - run:
+          name: tfsec
+          command: |
+            terraform --version
+            tfsec --version
+
+            terraform init -input=false -backend=false
+            tfsec
+
+workflows:
+  wf-terraform:
+    jobs:
+    - terraform-fmt:
+        name: tf fmt
+    - terraform-validate:
+        name: tf validate
+  wf-tflint:
+    jobs:
+    - tflint:
+        name: tflint
+  wf-tfsec:
+    jobs:
+    - tfsec:
+        name: tfsec
