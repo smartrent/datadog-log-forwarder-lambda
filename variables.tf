@@ -21,7 +21,7 @@ variable "dd_site" {
 variable "datadog_forwarder_version" {
   type        = string
   description = "The Datadog Forwarder version to use"
-  default     = "3.108.0"
+  default     = "3.121.0"
 }
 
 variable "runtime" {
