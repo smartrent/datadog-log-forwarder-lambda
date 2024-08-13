@@ -1,5 +1,5 @@
 container:
-  image: smartrent/terraform-ci:1.9.0
+  image: smartrent/terraform-ci:1.5.7-1a
   cpu: 1
 
 base: &base
