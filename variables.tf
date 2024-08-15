@@ -104,5 +104,5 @@ variable "rds_logs" {
 variable "store_failed_events" {
   type        = bool
   description = "Whether to store failed events in the log forwarder"
-  default     = true
+  default     = false
 }
