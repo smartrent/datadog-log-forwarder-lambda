@@ -106,3 +106,9 @@ variable "store_failed_events" {
   description = "Whether to store failed events in the log forwarder"
   default     = false
 }
+
+variable "bucket_name" {
+ description  = "name of the bucket to store cache files from several functions as well as failed events"
+ type         = string
+ default      = null
+}
