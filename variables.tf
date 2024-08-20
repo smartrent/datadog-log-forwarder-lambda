@@ -110,5 +110,5 @@ variable "store_failed_events" {
 variable "bucket_name" {
   description = "name of the bucket to store cache files from several functions as well as failed events"
   type        = string
-  default     = false
+  default     = null
 }
