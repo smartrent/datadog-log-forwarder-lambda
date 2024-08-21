@@ -104,11 +104,10 @@ variable "rds_logs" {
 variable "store_failed_events" {
   type        = bool
   description = "Whether to store failed events in the log forwarder"
-  default     = false
+  default     = true
 }
 
-variable "bucket_name" {
-  description = "name of the bucket to store cache files from several functions as well as failed events"
-  type        = string
-  default     = null
+variable "target_logging_bucket" {
+  type = string
+  description = "The server access logging bucket to send logs to"
 }

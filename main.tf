@@ -44,7 +44,7 @@ resource "aws_lambda_function" "logs_to_datadog" {
       DD_SITE                = var.dd_site
       DD_ENHANCED_METRICS    = var.enhanced_metrics
       DD_STORE_FAILED_EVENTS = var.store_failed_events
-      DD_S3_BUCKET_NAME      = var.bucket_name
+      DD_S3_BUCKET_NAME      = module.datadog_serverless_s3.bucket_name
       ## Filter out lambda platform logs
       DD_LOGS_CONFIG_PROCESSING_RULES = "[{\"type\": \"exclude_at_match\", \"name\": \"exclude_start_and_end_logs\", \"pattern\": \"(START|END) RequestId\"}]"
       EXCLUDE_AT_MATCH                = "\"(START|END) RequestId:\\s"
@@ -124,6 +124,21 @@ data "aws_iam_policy_document" "lambda_runtime" {
     resources = ["arn:aws:elasticfilesystem:*::file-system/*"]
 
   }
+  statement {
+    sid = "LambdaLogging"
+
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:ListBucket",
+      "s3:DeleteObject",
+    ]
+
+    resources = module.datadog_serverless_s3.bucket_arn
+
+  }
 }
 
 data "aws_iam_policy_document" "lambda_assume_role" {
@@ -190,4 +205,13 @@ resource "aws_lambda_permission" "rds_logs" {
   function_name = aws_lambda_function.logs_to_datadog.function_name
   principal     = "logs.${var.aws_region}.amazonaws.com"
   source_arn    = "arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:/aws/rds/*:*"
+}
+
+module "datadog_serverless_s3" {
+  source = "git@github.com:smartrent/terraform-aws-s3.git?ref=2.1.0"
+  bucket_name = "datadog-serverless-logs-${data.aws_caller_identity.current.account_id}-${var.environment_name}-${var.aws_region}"
+  target_logging_bucket = var.target_logging_bucket
+  aws_region = var.aws_region
+
+  tags = local.tags
 }
