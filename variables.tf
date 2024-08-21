@@ -106,8 +106,3 @@ variable "store_failed_events" {
   description = "Whether to store failed events in the log forwarder"
   default     = true
 }
-
-variable "target_logging_bucket" {
-  type = string
-  description = "The server access logging bucket to send logs to"
-}
