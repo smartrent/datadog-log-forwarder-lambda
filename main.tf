@@ -136,7 +136,7 @@ data "aws_iam_policy_document" "lambda_runtime" {
       "s3:DeleteObject",
     ]
 
-    resources = module.datadog_serverless_s3.bucket_arn
+    resources = [module.datadog_serverless_s3.bucket_arn]
 
   }
 }
@@ -212,6 +212,7 @@ module "datadog_serverless_s3" {
   bucket_name = "datadog-serverless-logs-${data.aws_caller_identity.current.account_id}-${var.environment_name}-${var.aws_region}"
   target_logging_bucket = join(", ", var.bucket_arns)
   aws_region = var.aws_region
-
+  enable_bucket_key = true
+  kms_master_key_arn = aws_kms_key.datadog.arn
   tags = local.tags
 }
