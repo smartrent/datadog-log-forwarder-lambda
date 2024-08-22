@@ -210,7 +210,7 @@ resource "aws_lambda_permission" "rds_logs" {
 module "datadog_serverless_s3" {
   source = "git@github.com:smartrent/terraform-aws-s3.git?ref=2.1.0"
   bucket_name = "datadog-lambda-logs-${data.aws_caller_identity.current.account_id}-${var.environment_name}-${var.aws_region}"
-  target_logging_bucket = join(", ", var.bucket_arns)
+  target_logging_bucket = var.s3_access_logging_bucket
   aws_region = var.aws_region
   enable_bucket_key = true
   kms_master_key_arn = aws_kms_key.datadog.arn
