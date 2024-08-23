@@ -108,7 +108,7 @@ variable "store_failed_events" {
 }
 
 variable "s3_access_logging_bucket" {
-  type = string
+  type        = string
   description = "The bucket name for S3 access logging"
-  default = ""
+  default     = ""
 }
