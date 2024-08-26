@@ -144,8 +144,21 @@ data "aws_iam_policy_document" "lambda_runtime" {
       "${module.datadog_serverless_s3.bucket_arn}",
       "${module.datadog_serverless_s3.bucket_arn}/*",
       ]
-
   }
+  statement {
+    sid    = "LambdaTagging"
+
+    effect = "Allow"
+    actions = [
+                "tag:GetResources",
+                "tag:GetTagKeys",
+                "tag:GetTagValues"
+            ]
+    resources = [
+      "*"
+    ]
+  }
+
 }
 
 data "aws_iam_policy_document" "lambda_assume_role" {
