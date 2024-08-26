@@ -141,19 +141,19 @@ data "aws_iam_policy_document" "lambda_runtime" {
     ]
 
     resources = [
-      "${module.datadog_serverless_s3.bucket_arn}",
+      module.datadog_serverless_s3.bucket_arn,
       "${module.datadog_serverless_s3.bucket_arn}/*",
-      ]
+    ]
   }
   statement {
-    sid    = "LambdaTagging"
+    sid = "LambdaTagging"
 
     effect = "Allow"
     actions = [
-                "tag:GetResources",
-                "tag:GetTagKeys",
-                "tag:GetTagValues"
-            ]
+      "tag:GetResources",
+      "tag:GetTagKeys",
+      "tag:GetTagValues"
+    ]
     resources = [
       "*"
     ]
