@@ -47,6 +47,10 @@ workflows:
       - smartrent/terraform_validate:
           name: Terraform Validate 
           <<: *terraform_docker_version
+          matrix:
+            parameters:
+              validate_path: *validate_lint_sec_paths
+
 
   wf-shellcheck:
     when: << pipeline.parameters.run_shellcheck >>
@@ -59,6 +63,9 @@ workflows:
       - smartrent/tflint:
           name: TFLint 
           <<: *terraform_docker_version
+          matrix:
+            parameters:
+              tflint_path: *validate_lint_sec_paths
 
   wf-tfsec:
     when: << pipeline.parameters.run_terraform >>
@@ -66,4 +73,7 @@ workflows:
       - smartrent/tfsec:
           name: TFSec 
           <<: *terraform_docker_version
-          tfsec_force_pass: "|| true"  #TODO: Remove once the tfsec errors have been fixed
+          tfsec_force_pass: "|| true"
+          matrix:
+            parameters:
+              tflint_path: *validate_lint_sec_paths
