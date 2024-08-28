@@ -12,6 +12,9 @@ default:
   terraform_docker_version: &terraform_docker_version
     docker_version: 1.5.7-1
   validate_lint_sec_paths: &validate_lint_sec_paths
+      [
+    "."
+  ]
 
 parameters:
   run_setup:
