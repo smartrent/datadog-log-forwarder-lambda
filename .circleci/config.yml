@@ -79,4 +79,4 @@ workflows:
           tfsec_force_pass: "|| true"
           matrix:
             parameters:
-              tflint_path: *validate_lint_sec_paths
+              tfsec_path: *validate_lint_sec_paths
