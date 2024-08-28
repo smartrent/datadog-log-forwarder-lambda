@@ -12,6 +12,9 @@ default:
   terraform_docker_version: &terraform_docker_version
     docker_version: 1.5.7-1
   validate_lint_sec_paths: &validate_lint_sec_paths
+    [
+      "./"
+    ]
 
 parameters:
   run_setup:
@@ -20,25 +23,7 @@ parameters:
   run_shellcheck:
     type: boolean
     default: false
-  run_terraform_all:
-    type: boolean
-    default: false
   run_terraform:
-    type: boolean
-    default: false
-  run_terraform_dev:
-    type: boolean
-    default: false
-  run_terraform_qa:
-    type: boolean
-    default: false
-  run_terraform_prod:
-    type: boolean
-    default: false
-  run_terraform_eng:
-    type: boolean
-    default: false
-  run_terraform_new:
     type: boolean
     default: false
 
@@ -53,6 +38,7 @@ workflows:
           mapping: |
             .* run_setup false
             .*\.sh run_shellcheck true
+            .* run_terraform true
 
   wf-terraform:
     when:
@@ -61,10 +47,13 @@ workflows:
       - smartrent/terraform_format:
           name: Terraform Format
           <<: *terraform_docker_version
-          format_path: "./infrastructure/terraform"
+          format_path: "."
       - smartrent/terraform_validate:
           name: Terraform Validate 
           <<: *terraform_docker_version
+          matrix:
+            parameters:
+              validate_path: *validate_lint_sec_paths
 
   wf-shellcheck:
     when: << pipeline.parameters.run_shellcheck >>
@@ -77,6 +66,9 @@ workflows:
       - smartrent/tflint:
           name: TFLint 
           <<: *terraform_docker_version
+          matrix:
+            parameters:
+              validate_path: *validate_lint_sec_paths
 
   wf-tfsec:
     when: << pipeline.parameters.run_terraform >>
@@ -84,4 +76,7 @@ workflows:
       - smartrent/tfsec:
           name: TFSec 
           <<: *terraform_docker_version
-          tfsec_force_pass: "|| true"  #TODO: Remove once the tfsec errors have been fixed
+          tfsec_force_pass: "|| true"  
+          matrix:
+            parameters:
+              validate_path: *validate_lint_sec_paths
