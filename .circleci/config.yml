@@ -65,8 +65,7 @@ workflows:
       - smartrent/tflint:
           name: TFLint 
           <<: *terraform_docker_version
-          matrix:
-            parameters:
+          parameters:
               tflint_path: *validate_lint_sec_paths
 
   wf-tfsec:
