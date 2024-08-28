@@ -46,12 +46,13 @@ workflows:
       - smartrent/terraform_format:
           name: Terraform Format
           <<: *terraform_docker_version
+          terraform_format_path: *validate_lint_sec_paths
       - smartrent/terraform_validate:
           name: Terraform Validate 
           <<: *terraform_docker_version
           matrix:
             parameters:
-              terraform_validate_path: *validate_lint_sec_paths
+              validate_path: *validate_lint_sec_paths
 
   wf-shellcheck:
     when: << pipeline.parameters.run_shellcheck >>
