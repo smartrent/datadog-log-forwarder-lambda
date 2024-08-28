@@ -46,7 +46,7 @@ workflows:
       - smartrent/terraform_format:
           name: Terraform Format
           <<: *terraform_docker_version
-          terraform_format_path: *validate_lint_sec_paths
+          terraform_format_path: "."
       - smartrent/terraform_validate:
           name: Terraform Validate 
           <<: *terraform_docker_version
