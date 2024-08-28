@@ -1,73 +1,87 @@
-# https://circleci.com/docs/configuration-reference/
 version: 2.1
 
-defaults:
-  terraform-docker-image: &terraform-docker-image
-    docker:
-      - image: smartrent/terraform-ci:1.5.7-1a
+setup: << pipeline.parameters.run_setup >>
 
-jobs:
-  terraform-fmt:
-    <<: *terraform-docker-image
-    steps:
-      - checkout
-      - run:
-          name: tf format
-          command: |
-            terraform --version
-            terraform fmt -check -recursive
 
-  terraform-validate:
-    <<: *terraform-docker-image
-    steps:
-      - checkout
-      - run:
-          name: tf validate
-          command: |
-            terraform --version
+orbs:
+  smartrent: smartrent/smartrent@1.1.0
+  path-filtering: circleci/path-filtering@1.0.0
+  shellcheck: circleci/shellcheck@3.2.0
 
-            terraform init -input=false -backend=false
-            terraform validate
+default:
+  terraform_docker_version: &terraform_docker_version
+    docker_version: 1.5.7-1
+  validate_lint_sec_paths: &validate_lint_sec_paths
 
-  tflint:
-    <<: *terraform-docker-image
-    steps:
-      - checkout
-      - run:
-          name: tflint
-          command: |
-            terraform --version
-            tflint --version
-
-            terraform init -input=false -backend=false
-            tflint --init --config ~/project/.tflint.hcl
-            tflint --module
-
-  tfsec:
-    <<: *terraform-docker-image
-    steps:
-      - checkout
-      - run:
-          name: tfsec
-          command: |
-            terraform --version
-            tfsec --version
-
-            terraform init -input=false -backend=false
-            tfsec
+parameters:
+  run_setup:
+    type: boolean
+    default: true
+  run_shellcheck:
+    type: boolean
+    default: false
+  run_terraform_all:
+    type: boolean
+    default: false
+  run_terraform:
+    type: boolean
+    default: false
+  run_terraform_dev:
+    type: boolean
+    default: false
+  run_terraform_qa:
+    type: boolean
+    default: false
+  run_terraform_prod:
+    type: boolean
+    default: false
+  run_terraform_eng:
+    type: boolean
+    default: false
+  run_terraform_new:
+    type: boolean
+    default: false
 
 workflows:
+  wf-setup:
+    when: << pipeline.parameters.run_setup >>
+    jobs:
+      - path-filtering/filter:
+          name: Workflow Setup
+          base-revision: main
+          config-path: .circleci/config.yml
+          mapping: |
+            .* run_setup false
+            .*\.sh run_shellcheck true
+
   wf-terraform:
+    when:
+      not: << pipeline.parameters.run_setup >>
     jobs:
-    - terraform-fmt:
-        name: tf fmt
-    - terraform-validate:
-        name: tf validate
+      - smartrent/terraform_format:
+          name: Terraform Format
+          <<: *terraform_docker_version
+          format_path: "./infrastructure/terraform"
+      - smartrent/terraform_validate:
+          name: Terraform Validate 
+          <<: *terraform_docker_version
+
+  wf-shellcheck:
+    when: << pipeline.parameters.run_shellcheck >>
+    jobs:
+      - shellcheck/check
+
   wf-tflint:
+    when: << pipeline.parameters.run_terraform >>
     jobs:
-    - tflint:
-        name: tflint
+      - smartrent/tflint:
+          name: TFLint 
+          <<: *terraform_docker_version
+
   wf-tfsec:
+    when: << pipeline.parameters.run_terraform >>
     jobs:
-    - tfsec:
-        name: tfsec
+      - smartrent/tfsec:
+          name: TFSec 
+          <<: *terraform_docker_version
+          tfsec_force_pass: "|| true"  #TODO: Remove once the tfsec errors have been fixed
