@@ -31,17 +31,17 @@ output "bucket_arns" {
 }
 
 output "cloudwatch_policy_arn" {
-  value = aws_iam_policy.cloudwatch_policy.arn
+  value = aws_iam_policy.cloudwatch_logs_policy.arn
 }
 
 output "cloudwatch_role_arn" {
-  value = aws_iam_role.cloudwatch_role.arn
+  value = aws_iam_role.cloudwatch_logs_role.arn
 }
 
 output "cloudwatch_kms_policy_arn" {
-  value = aws_iam_policy.cloudwatch_kms_policy.arn
+  value = aws_iam_policy.cloudwatch_logs_kms_policy.arn
 }
 
 output "cloudwatch_kms_role_arn" {
-  value = aws_iam_role.cloudwatch_kms_role.arn
+  value = aws_iam_role.cloudwatch_logs_kms_role.arn
 }
