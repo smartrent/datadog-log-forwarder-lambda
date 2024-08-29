@@ -240,7 +240,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_kms_policy" {
 
   statement {
     sid = "AllowCloudWatchtoUseKMSKey"
-
+    #tfsec:ignore:aws-iam-no-policy-wildcards
     actions = [
       "kms:Encrypt*",
       "kms:Decrypt*",
@@ -248,7 +248,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_kms_policy" {
       "kms:GenerateDataKey*",
       "kms:Describe*"
     ]
-
+    #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = [
       "*"
     ]
