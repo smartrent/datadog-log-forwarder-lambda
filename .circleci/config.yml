@@ -66,7 +66,6 @@ workflows:
           name: TFLint 
           <<: *terraform_docker_version
           tflint_path: "/"
-          tflint_path_part2: ""
           tflint_force_pass: "false"
 
   wf-tfsec:
