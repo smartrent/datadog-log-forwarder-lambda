@@ -15,9 +15,9 @@ locals {
 data "aws_caller_identity" "current" {}
 
 resource "aws_kms_key" "datadog" {
-  description = "KMS key for datadog lambda"
+  description         = "KMS key for datadog lambda"
   enable_key_rotation = true
-  tags        = local.tags
+  tags                = local.tags
 }
 
 resource "aws_kms_alias" "datadog" {
@@ -174,7 +174,6 @@ data "aws_iam_policy_document" "lambda_assume_role" {
   }
 }
 
-
 resource "aws_iam_role" "lambda_execution" {
   name               = "datadog-lambda-execution-${var.environment_name}-${var.aws_region}"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
@@ -202,7 +201,56 @@ resource "aws_iam_role_policy_attachment" "lambda_datadog_push" {
 resource "aws_cloudwatch_log_group" "log_group" {
   name              = "/aws/lambda/${aws_lambda_function.logs_to_datadog.function_name}"
   retention_in_days = var.retention
+  kms_key_id        = aws_kms_alias.datadog_alias.arn
   tags              = local.tags
+}
+
+data "aws_iam_policy_document" "cloudwatch_logs_kms_policy" {
+
+  statement {
+    sid = "AllowCloudWatchtoUseKMSKey"  
+
+    actions = [
+          "kms:Decrypt",
+          "kms:Encrypt",
+          "kms:GenerateDataKey",
+          "kms:DescribeKey"
+        ]
+
+    resources = [
+      aws_kms_key.datadog.arn
+    ]
+
+  }
+}
+
+data "aws_iam_policy_document" "cloudwatch_logs_role" {
+   statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["logs.${var.aws_region}.amazonaws.com"]
+    }
+}
+}
+
+resource "aws_iam_role" "cloudwatch_logs_role" {
+  name               = "datadog-cloudwatch-logs-role-${var.environment_name}-${var.aws_region}"
+  assume_role_policy = data.aws_iam_policy_document.cloudwatch_logs_role.json
+  tags               = local.tags
+}
+
+resource "aws_iam_policy" "cloudwatch_logs_kms_policy" {
+  name        = "datadog-cloudwatch-logs-kms-policy-${var.environment_name}-${var.aws_region}"
+  description = "IAM policy for allowing CloudWatch to use the KMS key"
+  policy      = data.aws_iam_policy_document.cloudwatch_logs_kms_policy.json
+  tags        = local.tags
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_logs_kms_policy" {
+  policy_arn = aws_iam_policy.cloudwatch_logs_kms_policy.arn
+  role       = aws_iam_role.cloudwatch_logs_role.name 
 }
 
 resource "aws_sns_topic_subscription" "sns_topic_arns" {
