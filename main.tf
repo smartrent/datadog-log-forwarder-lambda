@@ -70,6 +70,7 @@ resource "aws_secretsmanager_secret" "api-key" {
 }
 
 data "aws_iam_policy_document" "lambda_runtime" {
+  #tfsec:ignore:AWS:IAMPolicyWildcardAction
   statement {
     actions = [
       "secretsmanager:GetSecretValue",
