@@ -201,21 +201,21 @@ resource "aws_iam_role_policy_attachment" "lambda_datadog_push" {
 resource "aws_cloudwatch_log_group" "log_group" {
   name              = "/aws/lambda/${aws_lambda_function.logs_to_datadog.function_name}"
   retention_in_days = var.retention
-  kms_key_id        = aws_kms_alias.datadog_alias.arn
+  kms_key_id        = aws_kms_alias.datadog.arn
   tags              = local.tags
 }
 
 data "aws_iam_policy_document" "cloudwatch_logs_kms_policy" {
 
   statement {
-    sid = "AllowCloudWatchtoUseKMSKey"  
+    sid = "AllowCloudWatchtoUseKMSKey"
 
     actions = [
-          "kms:Decrypt",
-          "kms:Encrypt",
-          "kms:GenerateDataKey",
-          "kms:DescribeKey"
-        ]
+      "kms:Decrypt",
+      "kms:Encrypt",
+      "kms:GenerateDataKey",
+      "kms:DescribeKey"
+    ]
 
     resources = [
       aws_kms_key.datadog.arn
@@ -225,14 +225,14 @@ data "aws_iam_policy_document" "cloudwatch_logs_kms_policy" {
 }
 
 data "aws_iam_policy_document" "cloudwatch_logs_role" {
-   statement {
+  statement {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
     principals {
       type        = "Service"
       identifiers = ["logs.${var.aws_region}.amazonaws.com"]
     }
-}
+  }
 }
 
 resource "aws_iam_role" "cloudwatch_logs_role" {
@@ -250,7 +250,7 @@ resource "aws_iam_policy" "cloudwatch_logs_kms_policy" {
 
 resource "aws_iam_role_policy_attachment" "cloudwatch_logs_kms_policy" {
   policy_arn = aws_iam_policy.cloudwatch_logs_kms_policy.arn
-  role       = aws_iam_role.cloudwatch_logs_role.name 
+  role       = aws_iam_role.cloudwatch_logs_role.name
 }
 
 resource "aws_sns_topic_subscription" "sns_topic_arns" {
