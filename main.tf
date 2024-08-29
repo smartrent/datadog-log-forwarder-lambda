@@ -125,7 +125,7 @@ data "aws_iam_policy_document" "lambda_runtime" {
     actions = [
       "elasticfilesystem:DescribeAccessPoints",
     ]
-
+    #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = ["arn:aws:elasticfilesystem:*::file-system/*"]
 
   }
@@ -140,7 +140,7 @@ data "aws_iam_policy_document" "lambda_runtime" {
       "s3:ListBucket",
       "s3:DeleteObject",
     ]
-
+    #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = [
       module.datadog_serverless_s3.bucket_arn,
       "${module.datadog_serverless_s3.bucket_arn}/*",
