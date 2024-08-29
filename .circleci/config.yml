@@ -1,81 +1,73 @@
+# https://circleci.com/docs/configuration-reference/
 version: 2.1
 
-setup: << pipeline.parameters.run_setup >>
+defaults:
+  terraform-docker-image: &terraform-docker-image
+    docker:
+      - image: smartrent/terraform-ci:1.5.7-1a
 
-orbs:
-  smartrent: smartrent/smartrent@1.9.0
-  path-filtering: circleci/path-filtering@1.1.0
-  shellcheck: circleci/shellcheck@3.2.0
+jobs:
+  terraform-fmt:
+    <<: *terraform-docker-image
+    steps:
+      - checkout
+      - run:
+          name: tf format
+          command: |
+            terraform --version
+            terraform fmt -check -recursive
 
-default:
-  terraform_docker_version: &terraform_docker_version
-    docker_version: 1.5.7-1
-  validate_lint_sec_paths: &validate_lint_sec_paths
-    - "."
+  terraform-validate:
+    <<: *terraform-docker-image
+    steps:
+      - checkout
+      - run:
+          name: tf validate
+          command: |
+            terraform --version
 
-parameters:
-  run_setup:
-    type: boolean
-    default: true
-  run_shellcheck:
-    type: boolean
-    default: false
-  run_terraform:
-    type: boolean
-    default: false
+            terraform init -input=false -backend=false
+            terraform validate
+
+  tflint:
+    <<: *terraform-docker-image
+    steps:
+      - checkout
+      - run:
+          name: tflint
+          command: |
+            terraform --version
+            tflint --version
+
+            terraform init -input=false -backend=false
+            tflint --init --config ~/project/.tflint.hcl
+            tflint --module
+
+  tfsec:
+    <<: *terraform-docker-image
+    steps:
+      - checkout
+      - run:
+          name: tfsec
+          command: |
+            terraform --version
+            tfsec --version
+
+            terraform init -input=false -backend=false
+            tfsec
 
 workflows:
-  wf-setup:
-    when: << pipeline.parameters.run_setup >>
-    jobs:
-      - path-filtering/filter:
-          name: Workflow Setup
-          base-revision: main
-          config-path: .circleci/config.yml
-          mapping: |
-            .* run_setup false
-            .*\.sh run_shellcheck true
-            .* run_terraform true
-
   wf-terraform:
-    when:
-      not: << pipeline.parameters.run_setup >>
     jobs:
-      - smartrent/terraform_format:
-          name: Terraform Format
-          <<: *terraform_docker_version
-          matrix:
-            parameters:
-              format_path: *validate_lint_sec_paths
-      - smartrent/terraform_validate:
-          name: Terraform Validate 
-          <<: *terraform_docker_version
-          matrix:
-            parameters:
-              validate_path: *validate_lint_sec_paths
-
-  wf-shellcheck:
-    when: << pipeline.parameters.run_shellcheck >>
-    jobs:
-      - shellcheck/check
-
+    - terraform-fmt:
+        name: tf fmt
+    - terraform-validate:
+        name: tf validate
   wf-tflint:
-    when: << pipeline.parameters.run_terraform >>
     jobs:
-      - smartrent/tflint:
-          name: TFLint 
-          <<: *terraform_docker_version
-          matrix:
-            parameters:
-              tflint_path: *validate_lint_sec_paths
-              
+    - tflint:
+        name: tflint
   wf-tfsec:
-    when: << pipeline.parameters.run_terraform >>
     jobs:
-      - smartrent/tfsec:
-          name: TFSec 
-          <<: *terraform_docker_version
-          tfsec_force_pass: "|| true"
-          matrix:
-            parameters:
-              tfsec_path: *validate_lint_sec_paths
+    - tfsec:
+        name: tfsec
