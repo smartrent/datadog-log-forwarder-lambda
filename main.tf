@@ -16,6 +16,7 @@ data "aws_caller_identity" "current" {}
 
 resource "aws_kms_key" "datadog" {
   description         = "KMS key for datadog lambda"
+  policy                  = data.aws_iam_policy_document.kms_key_policy.json
   enable_key_rotation = true
   tags                = local.tags
 }
@@ -23,6 +24,36 @@ resource "aws_kms_key" "datadog" {
 resource "aws_kms_alias" "datadog" {
   target_key_id = aws_kms_key.datadog.key_id
   name          = "alias/datadog_lambda"
+}
+
+data "aws_iam_policy_document" "kms_key_policy" {
+  statement {
+    sid = "EnableIAMUserPermissions"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+    }
+    actions   = ["kms:*"]
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "AllowCloudWatchLogsToUseTheKey"
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["logs.amazonaws.com"]
+    }
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+    resources = ["*"]
+  }
 }
 
 resource "aws_lambda_function" "logs_to_datadog" {
@@ -211,16 +242,21 @@ data "aws_iam_policy_document" "cloudwatch_logs_kms_policy" {
     sid = "AllowCloudWatchtoUseKMSKey"
 
     actions = [
-      "kms:Decrypt",
-      "kms:Encrypt",
-      "kms:GenerateDataKey",
-      "kms:DescribeKey"
-    ]
+                "kms:Encrypt*",
+                "kms:Decrypt*",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+                "kms:Describe*"
+            ]
 
     resources = [
-      aws_kms_key.datadog.arn
-    ]
-
+      "*"
+      ]
+    condition {
+      test     = "ArnEquals"
+      variable = "kms:EncryptionContext:aws:logs:arn"
+      values   = ["arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:/aws/lambda/${aws_lambda_function.logs_to_datadog.function_name}"]
+    }
   }
 }
 
