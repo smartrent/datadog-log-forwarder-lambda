@@ -16,6 +16,7 @@ data "aws_caller_identity" "current" {}
 
 resource "aws_kms_key" "datadog" {
   description = "KMS key for datadog lambda"
+  enable_key_rotation = true
   tags        = local.tags
 }
 
