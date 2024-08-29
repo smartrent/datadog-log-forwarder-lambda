@@ -65,9 +65,10 @@ workflows:
       - smartrent/tflint:
           name: TFLint 
           <<: *terraform_docker_version
-          tflint_path: *validate_lint_sec_paths
-          tflint_force_pass: "false"
-
+          matrix:
+            parameters:
+              tflint_path: *validate_lint_sec_paths
+              
   wf-tfsec:
     when: << pipeline.parameters.run_terraform >>
     jobs:
