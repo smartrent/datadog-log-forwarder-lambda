@@ -30,18 +30,10 @@ output "bucket_arns" {
   value = module.datadog_serverless_s3.bucket_arn
 }
 
-output "cloudwatch_policy_arn" {
-  value = aws_iam_policy.cloudwatch_logs_policy.arn
-}
-
 output "cloudwatch_role_arn" {
   value = aws_iam_role.cloudwatch_logs_role.arn
 }
 
-output "cloudwatch_kms_policy_arn" {
+output "clouddwatch_kms_policy" {
   value = aws_iam_policy.cloudwatch_logs_kms_policy.arn
-}
-
-output "cloudwatch_kms_role_arn" {
-  value = aws_iam_role.cloudwatch_logs_kms_role.arn
 }
