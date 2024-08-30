@@ -246,7 +246,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_kms_policy" {
       "kms:Decrypt*",
       "kms:ReEncrypt*",
       "kms:GenerateDataKey*",
-      "kms:Describe*"
+      "kms:Describe*",
     ]
     #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = [
