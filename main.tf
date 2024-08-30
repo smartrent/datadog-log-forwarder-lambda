@@ -249,9 +249,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_kms_policy" {
       "kms:Describe*",
     ]
     #tfsec:ignore:aws-iam-no-policy-wildcards
-    resources = [
-      "*"
-    ]
+    resources = ["*"]
     condition {
       test     = "ArnEquals"
       variable = "kms:EncryptionContext:aws:logs:arn"
