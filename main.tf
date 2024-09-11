@@ -311,13 +311,18 @@ resource "aws_lambda_permission" "rds_logs" {
   source_arn    = "arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:/aws/rds/*:*"
 }
 
+# tfsec:ignore:aws-s3-enable-bucket-logging
 module "datadog_serverless_s3" {
-  source                = "git@github.com:smartrent/terraform-aws-s3.git?ref=2.1.0"
-  bucket_name           = "datadog-lambda-logs-${local.account_id}-${var.environment_name}-${var.aws_region}"
-  target_logging_bucket = var.s3_access_logging_bucket
-  aws_region            = var.aws_region
-  enable_bucket_key     = true
-  kms_master_key_arn    = aws_kms_key.datadog.arn
-  sse_algorithm         = "aws:kms"
-  tags                  = local.tags
+  source      = "git@github.com:smartrent/terraform-aws-s3.git?ref=2.1.0"
+  bucket_name = "datadog-lambda-logs-${local.account_id}-${var.environment_name}-${var.aws_region}"
+  # since this bucket is accessed by the datadog lambda function during invocation
+  # we don't want to recursively invoke the function by sending the logs to a bucket
+  # that triggers the function
+  disable_access_logging                 = true
+  bypass_default_security_configurations = true
+  aws_region                             = var.aws_region
+  enable_bucket_key                      = true
+  kms_master_key_arn                     = aws_kms_key.datadog.arn
+  sse_algorithm                          = "aws:kms"
+  tags                                   = local.tags
 }

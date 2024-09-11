@@ -106,9 +106,3 @@ variable "store_failed_events" {
   description = "Whether to store failed events in the log forwarder"
   default     = true
 }
-
-variable "s3_access_logging_bucket" {
-  type        = string
-  description = "The bucket name for S3 access logging"
-  default     = ""
-}

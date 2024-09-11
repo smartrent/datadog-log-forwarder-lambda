@@ -26,15 +26,20 @@ Version numbers for datadog_extension_layer_version can be found here: <https://
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_datadog_serverless_s3"></a> [datadog\_serverless\_s3](#module\_datadog\_serverless\_s3) | git@github.com:smartrent/terraform-aws-s3.git | 2.1.0 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
 | [aws_cloudwatch_log_group.log_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_iam_policy.cloudwatch_logs_kms_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.labmda_execution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_role.cloudwatch_logs_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.lambda_execution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy_attachment.cloudwatch_logs_kms_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.lambda_basic_execution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.lambda_datadog_push](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_kms_alias.datadog](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
@@ -45,6 +50,9 @@ No modules.
 | [aws_secretsmanager_secret.api-key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret) | resource |
 | [aws_sns_topic_subscription.sns_topic_arns](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.cloudwatch_logs_kms_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.cloudwatch_logs_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.kms_key_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.lambda_assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.lambda_runtime](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
@@ -54,7 +62,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS Region | `string` | n/a | yes |
 | <a name="input_bucket_arns"></a> [bucket\_arns](#input\_bucket\_arns) | A list of s3 bucket ARNs | `list(string)` | n/a | yes |
-| <a name="input_datadog_extension_layer_version"></a> [datadog\_extension\_layer\_version](#input\_datadog\_extension\_layer\_version) | The version of the Datadog Extension Layer | `number` | `63` | no |
+| <a name="input_datadog_extension_layer_version"></a> [datadog\_extension\_layer\_version](#input\_datadog\_extension\_layer\_version) | The version of the Datadog Extension Layer | `number` | `64` | no |
 | <a name="input_datadog_forwarder_version"></a> [datadog\_forwarder\_version](#input\_datadog\_forwarder\_version) | The Datadog Forwarder version to use | `string` | `"3.121.0"` | no |
 | <a name="input_datadog_python_layer_version"></a> [datadog\_python\_layer\_version](#input\_datadog\_python\_layer\_version) | The version of the Datadog Python Layer | `number` | `98` | no |
 | <a name="input_dd_site"></a> [dd\_site](#input\_dd\_site) | The Datadog Site Address | `string` | n/a | yes |
@@ -76,6 +84,10 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_bucket_arns"></a> [bucket\_arns](#output\_bucket\_arns) | n/a |
+| <a name="output_bucket_name"></a> [bucket\_name](#output\_bucket\_name) | n/a |
+| <a name="output_clouddwatch_kms_policy"></a> [clouddwatch\_kms\_policy](#output\_clouddwatch\_kms\_policy) | n/a |
+| <a name="output_cloudwatch_role_arn"></a> [cloudwatch\_role\_arn](#output\_cloudwatch\_role\_arn) | n/a |
 | <a name="output_kms_key_arn"></a> [kms\_key\_arn](#output\_kms\_key\_arn) | n/a |
 | <a name="output_lambda_api_key_secret"></a> [lambda\_api\_key\_secret](#output\_lambda\_api\_key\_secret) | n/a |
 | <a name="output_lambda_function_arn"></a> [lambda\_function\_arn](#output\_lambda\_function\_arn) | n/a |
