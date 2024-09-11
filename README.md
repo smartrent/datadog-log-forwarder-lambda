@@ -75,7 +75,6 @@ Version numbers for datadog_extension_layer_version can be found here: <https://
 | <a name="input_reserved_concurrent_executions"></a> [reserved\_concurrent\_executions](#input\_reserved\_concurrent\_executions) | Amount of reserved concurrent executions for this lambda function | `number` | `100` | no |
 | <a name="input_retention"></a> [retention](#input\_retention) | The log group retention in days | `number` | `30` | no |
 | <a name="input_runtime"></a> [runtime](#input\_runtime) | The version of the runtime to use | `string` | `"3.11"` | no |
-| <a name="input_s3_access_logging_bucket"></a> [s3\_access\_logging\_bucket](#input\_s3\_access\_logging\_bucket) | The bucket name for S3 access logging | `string` | `""` | no |
 | <a name="input_sns_topic_arns"></a> [sns\_topic\_arns](#input\_sns\_topic\_arns) | SNS Topic ARNs | `list(string)` | <pre>[<br>  "undefined"<br>]</pre> | no |
 | <a name="input_store_failed_events"></a> [store\_failed\_events](#input\_store\_failed\_events) | Whether to store failed events in the log forwarder | `bool` | `true` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to assign to resources created by this module | `map(string)` | n/a | yes |

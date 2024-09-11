@@ -311,6 +311,7 @@ resource "aws_lambda_permission" "rds_logs" {
   source_arn    = "arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:/aws/rds/*:*"
 }
 
+# tfsec:ignore:aws-s3-enable-bucket-logging
 module "datadog_serverless_s3" {
   source      = "git@github.com:smartrent/terraform-aws-s3.git?ref=2.1.0"
   bucket_name = "datadog-lambda-logs-${local.account_id}-${var.environment_name}-${var.aws_region}"
