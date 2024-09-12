@@ -241,56 +241,6 @@ resource "aws_cloudwatch_log_group" "log_group" {
   tags              = local.tags
 }
 
-data "aws_iam_policy_document" "cloudwatch_logs_kms_policy" {
-
-  statement {
-    sid = "AllowCloudWatchtoUseKMSKey"
-    #tfsec:ignore:aws-iam-no-policy-wildcards
-    actions = [
-      "kms:Encrypt*",
-      "kms:Decrypt*",
-      "kms:ReEncrypt*",
-      "kms:GenerateDataKey*",
-      "kms:Describe*",
-    ]
-    resources = [aws_kms_key.datadog.arn]
-    condition {
-      test     = "ArnEquals"
-      variable = "kms:EncryptionContext:aws:logs:arn"
-      values   = ["arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:/aws/lambda/${aws_lambda_function.logs_to_datadog.function_name}"]
-    }
-  }
-}
-
-data "aws_iam_policy_document" "cloudwatch_logs_role" {
-  statement {
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
-    principals {
-      type        = "Service"
-      identifiers = ["logs.${var.aws_region}.amazonaws.com"]
-    }
-  }
-}
-
-resource "aws_iam_role" "cloudwatch_logs_role" {
-  name               = "datadog-cloudwatch-logs-role-${var.environment_name}-${var.aws_region}"
-  assume_role_policy = data.aws_iam_policy_document.cloudwatch_logs_role.json
-  tags               = local.tags
-}
-
-resource "aws_iam_policy" "cloudwatch_logs_kms_policy" {
-  name        = "datadog-cloudwatch-logs-kms-policy-${var.environment_name}-${var.aws_region}"
-  description = "IAM policy for allowing CloudWatch to use the KMS key"
-  policy      = data.aws_iam_policy_document.cloudwatch_logs_kms_policy.json
-  tags        = local.tags
-}
-
-resource "aws_iam_role_policy_attachment" "cloudwatch_logs_kms_policy" {
-  policy_arn = aws_iam_policy.cloudwatch_logs_kms_policy.arn
-  role       = aws_iam_role.cloudwatch_logs_role.name
-}
-
 resource "aws_sns_topic_subscription" "sns_topic_arns" {
   count     = var.provision_trigger ? length(var.sns_topic_arns) : 0
   topic_arn = var.sns_topic_arns[count.index]
