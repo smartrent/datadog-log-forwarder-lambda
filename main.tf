@@ -16,9 +16,13 @@ data "aws_caller_identity" "current" {}
 
 resource "aws_kms_key" "datadog" {
   description         = "KMS key for datadog lambda"
-  policy              = data.aws_iam_policy_document.kms_key_policy.json
   enable_key_rotation = true
   tags                = local.tags
+}
+
+resource "aws_kms_key_policy" "datadog" {
+  key_id = aws_kms_key.datadog.id
+  policy = data.aws_iam_policy_document.kms_key_policy.json
 }
 
 resource "aws_kms_alias" "datadog" {
@@ -239,6 +243,8 @@ resource "aws_cloudwatch_log_group" "log_group" {
   retention_in_days = var.retention
   kms_key_id        = aws_kms_alias.datadog.arn
   tags              = local.tags
+
+  depends_on = [aws_kms_key_policy.datadog]
 }
 
 resource "aws_sns_topic_subscription" "sns_topic_arns" {
