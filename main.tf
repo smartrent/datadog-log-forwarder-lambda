@@ -53,6 +53,11 @@ data "aws_iam_policy_document" "kms_key_policy" {
       "kms:DescribeKey",
     ]
     resources = ["*"]
+    condition {
+      test     = "ArnEquals"
+      variable = "kms:EncryptionContext:aws:logs:arn"
+      values   = ["arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:/aws/lambda/${aws_lambda_function.logs_to_datadog.function_name}"]
+    }
   }
 }
 
@@ -248,8 +253,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_kms_policy" {
       "kms:GenerateDataKey*",
       "kms:Describe*",
     ]
-    #tfsec:ignore:aws-iam-no-policy-wildcards
-    resources = ["*"]
+    resources = [aws_kms_key.datadog.arn]
     condition {
       test     = "ArnEquals"
       variable = "kms:EncryptionContext:aws:logs:arn"
