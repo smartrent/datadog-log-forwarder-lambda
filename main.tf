@@ -87,7 +87,6 @@ resource "aws_lambda_function" "logs_to_datadog" {
       DD_STORE_FAILED_EVENTS = var.store_failed_events
       DD_S3_BUCKET_NAME      = module.datadog_serverless_s3.bucket_name
       ## Filter out lambda platform logs
-      DD_LOGS_CONFIG_PROCESSING_RULES = "[{\"type\": \"exclude_at_match\", \"name\": \"exclude_start_and_end_logs\", \"pattern\": \"(START|END) RequestId\" }]"
       DD_LOGS_CONFIG_PROCESSING_RULES = jsonencode([
         {
           type    = "exclude_at_match",
