@@ -102,7 +102,7 @@ resource "aws_lambda_function" "logs_to_datadog" {
         {
           type    = "exclude_at_match",
           name    = "exclude_ota_device_logs_304",
-          pattern = "/device-ota/.*\\s304$"
+          pattern = "/device-ota/.*\\s304"
         }
       ])
     }
