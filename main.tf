@@ -91,7 +91,7 @@ resource "aws_lambda_function" "logs_to_datadog" {
         {
           type    = "exclude_at_match",
           name    = "exclude_logs",
-          pattern = "(START|END) RequestId|(cb6286a0d1e7cf75494d129a44503b1e5238eca143859e52c4e36251c9527208|f0f74535e58c162dd3ac99ed60ebfaf413518e6e212a5d364ce226cbed800d01|9842704febb1bf081c69ebcd73febd166602d29de15d30268d3f27ac0b0bedb8)|/device-ota/.*\\s304"
+          pattern = "(START|END) RequestId|(cb6286a0d1e7cf75494d129a44503b1e5238eca143859e52c4e36251c9527208|f0f74535e58c162dd3ac99ed60ebfaf413518e6e212a5d364ce226cbed800d01|\"9842704febb1bf081c69ebcd73febd166602d29de15d30268d3f27ac0b0bedb8)|/device-ota/.*\\s304"
         }
       ])
     }
