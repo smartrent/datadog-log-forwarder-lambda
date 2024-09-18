@@ -86,22 +86,12 @@ resource "aws_lambda_function" "logs_to_datadog" {
       DD_ENHANCED_METRICS    = var.enhanced_metrics
       DD_STORE_FAILED_EVENTS = var.store_failed_events
       DD_S3_BUCKET_NAME      = module.datadog_serverless_s3.bucket_name
-      ## Filter out lambda platform logs
+      ## Filter out lambda platform logs / DW s3 access logs / zipato device ota 304 logs
       DD_LOGS_CONFIG_PROCESSING_RULES = jsonencode([
         {
           type    = "exclude_at_match",
-          name    = "exclude_start_and_end_lamda_platform_logs",
-          pattern = "(START|END) RequestId"
-        },
-        {
-          type    = "exclude_at_match",
-          name    = "exclude_dms_s3_access_logs",
-          pattern = "(cb6286a0d1e7cf75494d129a44503b1e5238eca143859e52c4e36251c9527208|f0f74535e58c162dd3ac99ed60ebfaf413518e6e212a5d364ce226cbed800d01|9842704febb1bf081c69ebcd73febd166602d29de15d30268d3f27ac0b0bedb8)" # The canonical ID of the AWS account that owns the bucket (dw-us-dev/qa/prod accounts)
-        },
-        {
-          type    = "exclude_at_match",
-          name    = "exclude_ota_device_logs_304",
-          pattern = "/device-ota/.*\\s304"
+          name    = "exclude_logs",
+          pattern = "(START|END) RequestId|(cb6286a0d1e7cf75494d129a44503b1e5238eca143859e52c4e36251c9527208|f0f74535e58c162dd3ac99ed60ebfaf413518e6e212a5d364ce226cbed800d01|9842704febb1bf081c69ebcd73febd166602d29de15d30268d3f27ac0b0bedb8)|/device-ota/.*\\s304"
         }
       ])
     }
