@@ -86,6 +86,7 @@ resource "aws_lambda_function" "logs_to_datadog" {
       DD_ENHANCED_METRICS    = var.enhanced_metrics
       DD_STORE_FAILED_EVENTS = var.store_failed_events
       DD_S3_BUCKET_NAME      = module.datadog_serverless_s3.bucket_name
+      DD_LOG_LEVEL           = "debug"
       ## Filter out lambda platform logs / DW s3 access logs / zipato device ota 304 logs
       DD_LOGS_CONFIG_PROCESSING_RULES = jsonencode([
         {
