@@ -106,3 +106,9 @@ variable "store_failed_events" {
   description = "Whether to store failed events in the log forwarder"
   default     = true
 }
+
+variable "exclude_logs_regex" {
+  type        = string
+  description = "Regex pattern to exclude logs from forwarding to Datadog"
+  default     = "\"(START|END) RequestId:\\s"
+}
