@@ -86,7 +86,6 @@ resource "aws_lambda_function" "logs_to_datadog" {
       DD_ENHANCED_METRICS    = var.enhanced_metrics
       DD_STORE_FAILED_EVENTS = var.store_failed_events
       DD_S3_BUCKET_NAME      = module.datadog_serverless_s3.bucket_name
-      DD_LOG_LEVEL           = "debug"
       EXCLUDE_AT_MATCH       = var.exclude_logs_regex
     }
   }
