@@ -64,6 +64,7 @@ Version numbers for datadog_extension_layer_version can be found here: <https://
 | <a name="input_dd_site"></a> [dd\_site](#input\_dd\_site) | The Datadog Site Address | `string` | n/a | yes |
 | <a name="input_enhanced_metrics"></a> [enhanced\_metrics](#input\_enhanced\_metrics) | Whether Datadog enhanced metrics is enabled | `bool` | `false` | no |
 | <a name="input_environment_name"></a> [environment\_name](#input\_environment\_name) | Environment name: dev, qa, prod | `string` | n/a | yes |
+| <a name="input_exclude_logs_regex"></a> [exclude\_logs\_regex](#input\_exclude\_logs\_regex) | Regex pattern to exclude logs from forwarding to Datadog | `string` | `"\"(START|END) RequestId:\\s"` | no |
 | <a name="input_layers"></a> [layers](#input\_layers) | Whether or not to use layers | `bool` | `false` | no |
 | <a name="input_memory_size"></a> [memory\_size](#input\_memory\_size) | Amount of memory in MB your Lambda Function can use at runtime | `number` | `1024` | no |
 | <a name="input_provision_trigger"></a> [provision\_trigger](#input\_provision\_trigger) | Whether or not to create a lambda trigger from an SNS topic | `bool` | `"false"` | no |

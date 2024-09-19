@@ -87,8 +87,7 @@ resource "aws_lambda_function" "logs_to_datadog" {
       DD_STORE_FAILED_EVENTS = var.store_failed_events
       DD_S3_BUCKET_NAME      = module.datadog_serverless_s3.bucket_name
       DD_LOG_LEVEL           = "debug"
-      ## Filter out lambda platform logs / DW s3 access logs / zipato device ota 304 logs
-      EXCLUDE_AT_MATCH = "\"(START|END) RequestId|(cb6286a0d1e7cf75494d129a44503b1e5238eca143859e52c4e36251c9527208|f0f74535e58c162dd3ac99ed60ebfaf413518e6e212a5d364ce226cbed800d01|\"9842704febb1bf081c69ebcd73febd166602d29de15d30268d3f27ac0b0bedb8)|/device-ota/.*\\s304"
+      EXCLUDE_AT_MATCH       = var.exclude_logs_regex
     }
   }
 
