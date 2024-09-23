@@ -272,7 +272,7 @@ resource "aws_lambda_permission" "rds_logs" {
 # tfsec:ignore:aws-s3-enable-bucket-logging
 module "datadog_serverless_s3" {
   source      = "git@github.com:smartrent/terraform-aws-s3.git?ref=2.2.0"
-  bucket_name = "datadog-lambda-logs-${local.account_id}-${var.environment_name}-${var.aws_region}"
+  bucket_name = "dd-cache-${local.account_id}-${var.environment_name}-${var.aws_region}"
   # since this bucket is accessed by the datadog lambda function during invocation
   # we don't want to recursively invoke the function by sending the logs to a bucket
   # that triggers the function
