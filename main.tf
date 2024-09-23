@@ -284,6 +284,6 @@ module "datadog_serverless_s3" {
   enable_bucket_key                      = true
   kms_master_key_arn                     = aws_kms_key.datadog.arn
   sse_algorithm                          = "aws:kms"
-  force_destroy = true
+  force_destroy                          = true
   tags                                   = local.tags
 }
