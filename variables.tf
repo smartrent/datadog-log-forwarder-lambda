@@ -112,3 +112,9 @@ variable "exclude_logs_regex" {
   description = "Regex pattern to exclude logs from forwarding to Datadog"
   default     = "\"(START|END) RequestId:\\s"
 }
+
+variable "redis_logs" {
+  type        = string
+  description = "Whether to create lambda resource policy for sending all /*-redis-* cloudwatch logs to the datadog log forwarder"
+  default     = true
+}
