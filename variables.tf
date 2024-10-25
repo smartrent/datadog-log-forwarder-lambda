@@ -115,6 +115,6 @@ variable "exclude_logs_regex" {
 
 variable "log_group_names" {
   type        = map(any)
-  description = "Whether to create lambda resource policy for sending all /*-redis-* cloudwatch logs to the datadog log forwarder"
+  description = "A map of log group names to create lambda subscriptions for"
   default     = {}
 }
