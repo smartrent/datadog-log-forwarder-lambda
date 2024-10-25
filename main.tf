@@ -269,13 +269,13 @@ resource "aws_lambda_permission" "rds_logs" {
   source_arn    = "arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:/aws/rds/*:*"
 }
 
-resource "aws_lambda_permission" "redis_logs" {
-  count         = var.redis_logs ? 1 : 0
-  statement_id  = "${local.account_id}-${var.aws_region}-redis-logs-to-datadog"
+resource "aws_lambda_permission" "additional_logs" {
+  for_each      = { for k, v in var.log_group_names : k => v }
+  statement_id  = "${local.account_id}-${var.aws_region}-${each.key}-logs-to-datadog"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.logs_to_datadog.function_name
   principal     = "logs.${var.aws_region}.amazonaws.com"
-  source_arn    = "arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:/*-redis-*:*"
+  source_arn    = "arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:${each.value}"
 }
 
 # tfsec:ignore:aws-s3-enable-bucket-logging
