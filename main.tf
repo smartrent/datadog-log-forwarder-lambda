@@ -269,6 +269,15 @@ resource "aws_lambda_permission" "rds_logs" {
   source_arn    = "arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:/aws/rds/*:*"
 }
 
+resource "aws_lambda_permission" "additional_logs" {
+  for_each      = { for k, v in var.log_group_names : k => v }
+  statement_id  = "${local.account_id}-${var.aws_region}-${each.key}-logs-to-datadog"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.logs_to_datadog.function_name
+  principal     = "logs.${var.aws_region}.amazonaws.com"
+  source_arn    = "arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:${each.value}"
+}
+
 # tfsec:ignore:aws-s3-enable-bucket-logging
 module "datadog_serverless_s3" {
   source      = "git@github.com:smartrent/terraform-aws-s3.git?ref=2.2.0"

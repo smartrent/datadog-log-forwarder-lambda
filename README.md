@@ -28,7 +28,7 @@ Version numbers for datadog_extension_layer_version can be found here: <https://
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_datadog_serverless_s3"></a> [datadog\_serverless\_s3](#module\_datadog\_serverless\_s3) | git@github.com:smartrent/terraform-aws-s3.git | 2.1.0 |
+| <a name="module_datadog_serverless_s3"></a> [datadog\_serverless\_s3](#module\_datadog\_serverless\_s3) | git@github.com:smartrent/terraform-aws-s3.git | 2.2.0 |
 
 ## Resources
 
@@ -43,6 +43,7 @@ Version numbers for datadog_extension_layer_version can be found here: <https://
 | [aws_kms_key.datadog](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_kms_key_policy.datadog](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key_policy) | resource |
 | [aws_lambda_function.logs_to_datadog](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
+| [aws_lambda_permission.additional_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
 | [aws_lambda_permission.rds_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
 | [aws_lambda_permission.sns_topic_arns](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
 | [aws_secretsmanager_secret.api-key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret) | resource |
@@ -66,6 +67,7 @@ Version numbers for datadog_extension_layer_version can be found here: <https://
 | <a name="input_environment_name"></a> [environment\_name](#input\_environment\_name) | Environment name: dev, qa, prod | `string` | n/a | yes |
 | <a name="input_exclude_logs_regex"></a> [exclude\_logs\_regex](#input\_exclude\_logs\_regex) | Regex pattern to exclude logs from forwarding to Datadog | `string` | `"\"(START|END) RequestId:\\s"` | no |
 | <a name="input_layers"></a> [layers](#input\_layers) | Whether or not to use layers | `bool` | `false` | no |
+| <a name="input_log_group_names"></a> [log\_group\_names](#input\_log\_group\_names) | A map of log group names to create lambda subscriptions for | `map(any)` | `{}` | no |
 | <a name="input_memory_size"></a> [memory\_size](#input\_memory\_size) | Amount of memory in MB your Lambda Function can use at runtime | `number` | `1024` | no |
 | <a name="input_provision_trigger"></a> [provision\_trigger](#input\_provision\_trigger) | Whether or not to create a lambda trigger from an SNS topic | `bool` | `"false"` | no |
 | <a name="input_rds_logs"></a> [rds\_logs](#input\_rds\_logs) | Whether to create lambda resource policy for sending all /aws/rds/* cloudwatch logs to the datadog log forwarder | `bool` | `true` | no |

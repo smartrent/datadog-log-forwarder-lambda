@@ -112,3 +112,9 @@ variable "exclude_logs_regex" {
   description = "Regex pattern to exclude logs from forwarding to Datadog"
   default     = "\"(START|END) RequestId:\\s"
 }
+
+variable "log_group_names" {
+  type        = map(any)
+  description = "A map of log group names to create lambda subscriptions for"
+  default     = {}
+}
