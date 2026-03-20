@@ -43,15 +43,15 @@ jobs:
             tflint --init --config ~/project/.tflint.hcl
             tflint --module
 
-  tfsec:
-    <<: *terraform-docker-image
-    steps:
-      - checkout
-      - run:
-          name: tfsec
-          command: |
-            terraform --version
-            tfsec --version
+  # tfsec:  # DISABLED - tfsec compromised
+  # <<: *terraform-docker-image
+  # steps:
+  # - checkout
+  # - run:
+  # name: tfsec
+  # command: |
+  # terraform --version
+  # tfsec --version
 
             terraform init -input=false -backend=false
             tfsec
@@ -67,7 +67,7 @@ workflows:
     jobs:
     - tflint:
         name: tflint
-  wf-tfsec:
-    jobs:
-    - tfsec:
-        name: tfsec
+  # wf-tfsec:  # DISABLED - tfsec compromised
+  # jobs:
+  # - tfsec:
+  # name: tfsec
